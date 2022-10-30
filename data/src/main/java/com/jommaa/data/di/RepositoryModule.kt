@@ -1,7 +1,9 @@
 package com.jommaa.leboncoin.di
 
-import com.jommaa.data.repositoriesImp.AlbumsRepositoryImp
-import com.jommaa.domain.repositories.IAlbumsRepository
+import com.jommaa.data.repositoriesImp.LocalAlbumsRepositoryImp
+import com.jommaa.data.repositoriesImp.NetworkAlbumsRepositoryImp
+import com.jommaa.domain.repositories.ILocalAlbumsRepository
+import com.jommaa.domain.repositories.INetworkAlbumsRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -13,6 +15,9 @@ import dagger.hilt.components.SingletonComponent
 abstract class RepositoryModule {
 
     @Binds
-    abstract fun bindAlbumsRepository(albumsRepositoryImp: AlbumsRepositoryImp): IAlbumsRepository
+    abstract fun bindNetworkAlbumsRepository(albumsRepositoryImp: NetworkAlbumsRepositoryImp): INetworkAlbumsRepository
+
+    @Binds
+    abstract fun bindLocalAlbumsRepository(albumsRepositoryImp: LocalAlbumsRepositoryImp): ILocalAlbumsRepository
 
 }

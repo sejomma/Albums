@@ -15,6 +15,7 @@ import com.jommaa.albums.databinding.MainFragmentBinding
 import com.jommaa.albums.view.adapters.AlbumsListAdapter
 import com.jommaa.albums.viewmodel.MainViewModel
 import com.jommaa.domain.dataresult.DataResult
+import com.jommaa.domain.entities.Album
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -42,12 +43,12 @@ class MainFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.recyclerAlbumsList.apply {
             layoutManager = LinearLayoutManager(activity)
-            adapter = AlbumsListAdapter(null)
+            adapter = AlbumsListAdapter(mutableListOf<Album>())
         }
         binding.retryButton.setOnClickListener {
             vm.fetchAlbums()
         }
-        vm.getAlbums().observe(viewLifecycleOwner, Observer<DataResult> {
+        vm.getAlbums().observe(viewLifecycleOwner, Observer<DataResult<List<Album>>> {
             when (it) {
                 is DataResult.Loading -> {
                     binding.textError.visibility = View.GONE
@@ -56,9 +57,9 @@ class MainFragment : Fragment() {
                 }
                 is DataResult.Success -> {
                     binding.progress.visibility = View.GONE
-                    when(it.albums != null && it.albums.isNotEmpty()){
+                    when(it.data != null && it.data.isNotEmpty()){
                         true->{
-                            (binding.recyclerAlbumsList.adapter as AlbumsListAdapter).submitList(it.albums)
+                            (binding.recyclerAlbumsList.adapter as AlbumsListAdapter).submitList(it.data)
                         }
                         else->{
                             binding.textError.visibility = View.VISIBLE
@@ -66,14 +67,12 @@ class MainFragment : Fragment() {
                             binding.textError.text = "No data available To Display"
                         }
                     }
-
-
                 }
                 is DataResult.Failure -> {
                     binding.progress.visibility = View.GONE
                     binding.textError.visibility = View.VISIBLE
                     binding.retryButton.visibility = View.VISIBLE
-                    binding.textError.text = it.message
+                    binding.textError.text = it.exp.message
                 }
             }
         })

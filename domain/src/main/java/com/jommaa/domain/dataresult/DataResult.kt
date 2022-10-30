@@ -2,8 +2,8 @@ package com.jommaa.domain.dataresult
 
 import com.jommaa.domain.entities.Album
 
-sealed class DataResult {
-    class Success(val albums: List<Album>) : DataResult()
-    object Loading : DataResult()
-    class Failure(val exception: Exception,val message:String) : DataResult()
+sealed class DataResult<out R: Any> {
+    object Loading:DataResult<Nothing>()
+    data class Success<out T:Any>(val data: T):DataResult<T>()
+    data class Failure(val exp: CustomException):DataResult<Nothing>()
 }

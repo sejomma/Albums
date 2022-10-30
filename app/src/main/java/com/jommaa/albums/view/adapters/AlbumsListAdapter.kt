@@ -9,7 +9,7 @@ import com.jommaa.albums.databinding.AlbumBinding
 import com.jommaa.domain.entities.Album
 import com.squareup.picasso.Picasso
 
-class AlbumsListAdapter(private var data:MutableList<Album>?) : RecyclerView.Adapter<AlbumsListAdapter.ViewHolder>() {
+class AlbumsListAdapter(private var data:MutableList<Album>) : RecyclerView.Adapter<AlbumsListAdapter.ViewHolder>() {
 
     inner class ViewHolder(val binding: AlbumBinding) : RecyclerView.ViewHolder(binding.root)
 
@@ -25,7 +25,7 @@ class AlbumsListAdapter(private var data:MutableList<Album>?) : RecyclerView.Ada
                 data?.let{
                 with(it[position]){
                     binding.albumTitle.text=this.title
-                    Picasso.get().load(this.url).placeholder(R.drawable.ic_launcher_background).into(binding.albumIcon)
+                    Picasso.get().load(this.url).into(binding.albumIcon)
                 }
             }
         }
@@ -40,11 +40,9 @@ class AlbumsListAdapter(private var data:MutableList<Album>?) : RecyclerView.Ada
 
     }
     fun submitList(newData: List<Album>) {
-        data?.let{
-            it.clear()
-            it.addAll(newData)
-            notifyDataSetChanged()
-        }
+        data.clear()
+        data.addAll(newData)
+        notifyDataSetChanged()
     }
 
 }
