@@ -20,7 +20,7 @@ class MainViewModel @Inject constructor(
     private val putAlbumsInLocalDBUseCase: PutAlbumsInLocalDBUseCase
 ) : ViewModel() {
 
-
+    lateinit var selectedAlbum: Album
     private val albums = MutableLiveData<DataResult<List<Album>>>()
 
     fun getAlbums(): MutableLiveData<DataResult<List<Album>>> {

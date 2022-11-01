@@ -5,14 +5,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.jommaa.albums.R
 import com.jommaa.albums.databinding.MainFragmentBinding
 import com.jommaa.albums.view.adapters.AlbumsListAdapter
+import com.jommaa.albums.view.adapters.OnClickListener
 import com.jommaa.albums.viewmodel.MainViewModel
 import com.jommaa.domain.dataresult.DataResult
 import com.jommaa.domain.entities.Album
@@ -22,7 +24,7 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class MainFragment : Fragment() {
 
-    private val vm: MainViewModel by viewModels()
+    private val vm: MainViewModel by activityViewModels()
     private var _binding: MainFragmentBinding? = null
     private val binding get() = _binding!!
     override fun onCreateView(
@@ -43,12 +45,15 @@ class MainFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.recyclerAlbumsList.apply {
             layoutManager = LinearLayoutManager(activity)
-            adapter = AlbumsListAdapter(mutableListOf<Album>())
+            adapter = AlbumsListAdapter(mutableListOf<Album>(), OnClickListener { album->
+                vm.selectedAlbum=album
+                findNavController().navigate(R.id.action_go_to_details_page)
+             })
         }
         binding.retryButton.setOnClickListener {
             vm.fetchAlbums()
         }
-        vm.getAlbums().observe(viewLifecycleOwner, Observer<DataResult<List<Album>>> {
+        vm.getAlbums().observe(viewLifecycleOwner) {
             when (it) {
                 is DataResult.Loading -> {
                     binding.textError.visibility = View.GONE
@@ -57,11 +62,11 @@ class MainFragment : Fragment() {
                 }
                 is DataResult.Success -> {
                     binding.progress.visibility = View.GONE
-                    when(it.data != null && it.data.isNotEmpty()){
-                        true->{
+                    when (it.data != null && it.data.isNotEmpty()) {
+                        true -> {
                             (binding.recyclerAlbumsList.adapter as AlbumsListAdapter).submitList(it.data)
                         }
-                        else->{
+                        else -> {
                             binding.textError.visibility = View.VISIBLE
                             binding.retryButton.visibility = View.VISIBLE
                             binding.textError.text = "No data available To Display"
@@ -75,11 +80,14 @@ class MainFragment : Fragment() {
                     binding.textError.text = it.exp.message
                 }
             }
-        })
+        }
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 vm.fetchAlbums()
             }
         }
-}}
+}
+
+
+}

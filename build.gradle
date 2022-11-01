@@ -15,6 +15,7 @@ buildscript {
     ext.okhttp3_version='4.10.0'
     ext.kotlinx_coroutines_test='1.6.4'
     ext.core_testing='2.1.0'
+    ext.nav_version="2.3.5"
 
     repositories {
         google()

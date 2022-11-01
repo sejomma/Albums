@@ -6,6 +6,6 @@ data class Album(
     var title: String,
     var url: String,
     var thumbnailUrl: String
-)
+) : java.io.Serializable
 
 
