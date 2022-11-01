@@ -2,7 +2,7 @@ package com.jommaa.albums
 
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso
-import androidx.test.espresso.assertion.ViewAssertions
+import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.rule.ActivityTestRule
@@ -24,14 +24,20 @@ class MainActivityTest {
     }
 
     @Test
-    fun assert_loading_appears() {
-        Espresso.onView((ViewMatchers.withId(R.id.progress))).check(ViewAssertions.matches(
-            ViewMatchers.isDisplayed()))
-    }
-
-    @Test
     fun assert_can_scroll_to_into_albums_list() {
         Espresso.onView(AllOf.allOf(ViewMatchers.withId(R.id.recycler_albumsList)))
             .perform(RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(10))
+    }
+
+    @Test
+    fun perform_album_item_click() {
+        Thread.sleep(1000)
+        Espresso.onView(AllOf.allOf(ViewMatchers.withId(R.id.recycler_albumsList)))
+            .perform(
+                RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
+                    1,
+                    ViewActions.click()
+                )
+            )
     }
 }

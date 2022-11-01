@@ -11,7 +11,7 @@ import kotlinx.coroutines.withContext
 class GetAlbumsFromLocalUseCase(private val albumRepository: ILocalAlbumsRepository) {
 
     suspend fun execute(): DataResult<List<Album>> {
-        return  withContext(Dispatchers.IO) {getAlbumsListFromDB()}
+        return withContext(Dispatchers.IO) { getAlbumsListFromDB() }
 
     }
 
@@ -32,19 +32,15 @@ class GetAlbumsFromLocalUseCase(private val albumRepository: ILocalAlbumsReposit
                     )
                 }
             }
-        }
-        catch (exception: Exception){
-            return DataResult.Failure(CustomException(
-                null,
-                "Unknown Error, please try again"
-            ))
+        } catch (exception: Exception) {
+            return DataResult.Failure(
+                CustomException(
+                    null,
+                    "Unknown Error, please try again"
+                )
+            )
         }
     }
-
-    /**
-     * Insert into local DB an albums list
-     * @param:albumsList : albums list that will be saved
-     **/
 
 }
 

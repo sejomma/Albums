@@ -10,7 +10,7 @@ import com.jommaa.albums.databinding.DetailsFragmentBinding
 import com.jommaa.albums.viewmodel.MainViewModel
 import com.squareup.picasso.Picasso
 
-class DetailsFragment: Fragment() {
+class DetailsFragment : Fragment() {
     private val vm: MainViewModel by activityViewModels()
     private var _binding: DetailsFragmentBinding? = null
     private val binding get() = _binding!!
@@ -21,12 +21,13 @@ class DetailsFragment: Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = DetailsFragmentBinding.inflate(inflater, container, false)
-        binding.albumTitle.text=vm.selectedAlbum.title
-        binding.albumUrl.text=vm.selectedAlbum.url
+        binding.albumTitle.text = vm.selectedAlbum.title
+        binding.albumUrl.text = vm.selectedAlbum.url
         Picasso.get().load(vm.selectedAlbum.url).into(binding.albumIcon)
         val view = binding.root
         return view
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

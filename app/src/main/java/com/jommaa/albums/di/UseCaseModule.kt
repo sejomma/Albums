@@ -15,17 +15,17 @@ import dagger.hilt.components.SingletonComponent
 object UseCaseModule {
 
     @Provides
-    fun provideGetAlbumsFromNetworkUseCase(repo:INetworkAlbumsRepository):GetAlbumsFromNetworkUseCase{
+    fun provideGetAlbumsFromNetworkUseCase(repo: INetworkAlbumsRepository): GetAlbumsFromNetworkUseCase {
         return GetAlbumsFromNetworkUseCase(repo)
     }
 
     @Provides
-    fun provideGetAlbumsFromLocalUseCase(repo:ILocalAlbumsRepository):GetAlbumsFromLocalUseCase{
+    fun provideGetAlbumsFromLocalUseCase(repo: ILocalAlbumsRepository): GetAlbumsFromLocalUseCase {
         return GetAlbumsFromLocalUseCase(repo)
     }
 
     @Provides
-    fun providePutAlbumsInLocalDBUseCase(repo: ILocalAlbumsRepository): PutAlbumsInLocalDBUseCase{
+    fun providePutAlbumsInLocalDBUseCase(repo: ILocalAlbumsRepository): PutAlbumsInLocalDBUseCase {
         return PutAlbumsInLocalDBUseCase(repo)
     }
 }

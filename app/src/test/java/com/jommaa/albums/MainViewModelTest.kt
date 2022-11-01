@@ -19,34 +19,38 @@ import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.junit.MockitoJUnitRunner
-import retrofit2.HttpException
-import java.net.UnknownHostException
 
 @ExperimentalCoroutinesApi
 @RunWith(MockitoJUnitRunner::class)
 class MainViewModelTest {
     @get:Rule
     val testInstantTaskExecutorRule: TestRule = InstantTaskExecutorRule()
+
     @get:Rule
     val testCoroutineRule = TestCoroutineRule()
+
     @Mock
-    lateinit var fromLocalUseCase:GetAlbumsFromLocalUseCase
+    lateinit var fromLocalUseCase: GetAlbumsFromLocalUseCase
+
     @Mock
-    lateinit var fromNetworkUseCase:GetAlbumsFromNetworkUseCase
+    lateinit var fromNetworkUseCase: GetAlbumsFromNetworkUseCase
+
     @Mock
     lateinit var putAlbumsInLocalDBUseCase: PutAlbumsInLocalDBUseCase
 
-    private lateinit var mainViewModel:MainViewModel
+    private lateinit var mainViewModel: MainViewModel
+
     @Mock
     private lateinit var albumsObserver: Observer<in DataResult<List<Album>>>
 
     @Before
-    fun setUp(){
-        mainViewModel = MainViewModel(fromNetworkUseCase,fromLocalUseCase,putAlbumsInLocalDBUseCase)
+    fun setUp() {
+        mainViewModel =
+            MainViewModel(fromNetworkUseCase, fromLocalUseCase, putAlbumsInLocalDBUseCase)
     }
 
     @Test
-    fun `when fetching results ok then return a list successfully`(){
+    fun `when fetching results ok then return a list successfully`() {
         val emptyList = arrayListOf<Album>()
         mainViewModel.getAlbums().observeForever(albumsObserver)
         testCoroutineRule.runBlockingTest {
@@ -74,13 +78,12 @@ class MainViewModelTest {
 
     @Test
     fun `when fetching results fails then return an error`() {
-        val exception = Mockito.mock(HttpException::class.java)
         testCoroutineRule.runBlockingTest {
             mainViewModel.getAlbums().observeForever(albumsObserver)
             Mockito.`when`(
                 fromNetworkUseCase.execute()
             ).thenAnswer {
-                DataResult.Failure(CustomException(null,""))
+                DataResult.Failure(CustomException(null, ""))
             }
             mainViewModel.fetchAlbums()
             Assert.assertNull(mainViewModel.getAlbums().value)

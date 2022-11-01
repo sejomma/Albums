@@ -36,6 +36,7 @@ class MainFragment : Fragment() {
         val view = binding.root
         return view
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
@@ -45,10 +46,10 @@ class MainFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.recyclerAlbumsList.apply {
             layoutManager = LinearLayoutManager(activity)
-            adapter = AlbumsListAdapter(mutableListOf<Album>(), OnClickListener { album->
-                vm.selectedAlbum=album
+            adapter = AlbumsListAdapter(mutableListOf<Album>(), OnClickListener { album ->
+                vm.selectedAlbum = album
                 findNavController().navigate(R.id.action_go_to_details_page)
-             })
+            })
         }
         binding.retryButton.setOnClickListener {
             vm.fetchAlbums()
@@ -87,7 +88,7 @@ class MainFragment : Fragment() {
                 vm.fetchAlbums()
             }
         }
-}
+    }
 
 
 }

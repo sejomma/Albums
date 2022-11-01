@@ -22,7 +22,8 @@ class GetAlbumsListFromUseCaseTest {
     @Test
     fun `assert the albums returned by the network repo is the same list returned by the use case`() {
         runBlocking {
-            getAlbumsFromNetworkUseCase = GetAlbumsFromNetworkUseCase(FakeNetworkAlbumsRepositoryWithData())
+            getAlbumsFromNetworkUseCase =
+                GetAlbumsFromNetworkUseCase(FakeNetworkAlbumsRepositoryWithData())
             val result = getAlbumsFromNetworkUseCase.execute()
             assert(result is DataResult.Success<List<Album>>)
             assert((result as DataResult.Success<List<Album>>).data.size == 2)
@@ -32,11 +33,12 @@ class GetAlbumsListFromUseCaseTest {
     @Test
     fun `assert that network use case return success when repository returns zero albums`() {
         runBlocking {
-            getAlbumsFromNetworkUseCase = GetAlbumsFromNetworkUseCase(FakeNetworkAlbumsRepositoryWithoutData())
+            getAlbumsFromNetworkUseCase =
+                GetAlbumsFromNetworkUseCase(FakeNetworkAlbumsRepositoryWithoutData())
             val result = getAlbumsFromNetworkUseCase.execute()
             assert(result is DataResult.Failure)
             assertNull((result as DataResult.Failure).exp.ex)
-            assert(result.exp.message=="No Data available from API")
+            assert(result.exp.message == "No Data available from API")
 
         }
     }
@@ -44,7 +46,8 @@ class GetAlbumsListFromUseCaseTest {
     @Test
     fun `assert the albums returned by the local repo is the same list returned by the use case`() {
         runBlocking {
-            getAlbumsFromLocalUseCase = GetAlbumsFromLocalUseCase(FakeLocalAlbumsRepositoryWithData())
+            getAlbumsFromLocalUseCase =
+                GetAlbumsFromLocalUseCase(FakeLocalAlbumsRepositoryWithData())
             val result = getAlbumsFromLocalUseCase.execute()
             assert(result is DataResult.Success<List<Album>>)
             assert((result as DataResult.Success<List<Album>>).data.size == 1)
@@ -54,11 +57,12 @@ class GetAlbumsListFromUseCaseTest {
     @Test
     fun `assert that local use case return success when repository returns zero albums`() {
         runBlocking {
-            getAlbumsFromLocalUseCase = GetAlbumsFromLocalUseCase(FakeLocalAlbumsRepositoryWithoutData())
+            getAlbumsFromLocalUseCase =
+                GetAlbumsFromLocalUseCase(FakeLocalAlbumsRepositoryWithoutData())
             val result = getAlbumsFromLocalUseCase.execute()
             assert(result is DataResult.Failure)
             assertNull((result as DataResult.Failure).exp.ex)
-            assert(result.exp.message=="No data available to display, please make sure you have internet connection and try again")
+            assert(result.exp.message == "No data available to display, please make sure you have internet connection and try again")
         }
     }
 
